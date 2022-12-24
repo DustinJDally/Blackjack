@@ -1,17 +1,21 @@
+import random
+
 class Card():
   def __init__(self, face, suit, value):
     self.face = face
     self.suit = suit
     self.value = value
-  
-  def printCard(self):
+
+  def printCardAndValue(self):
     suitIcon = {"club":"♣", "diamond":"♦", "heart":"♥", "spade":"♠"}
-    # cardValue={"A":0, "J":10, "Q":10, "K":10, "face":"face"}
-    print(f"{self.face}{suitIcon[self.suit]}{self.value}")
+    print(f"{self.face}{suitIcon[self.suit]} {self.value}")
 
-# card = Card("9", "diamond")
+  def printCardOnly(self):
+    suitIcon = {"club":"♣", "diamond":"♦", "heart":"♥", "spade":"♠"}
+    print(f"{self.face}{suitIcon[self.suit]}")
 
-# card.printCard()
+  # def dealCards(self):
+  #   return card
 
 class Deck():
   def __init__(self):
@@ -30,7 +34,26 @@ class Deck():
         card = Card(face, suit, value)
         self.cards.append(card)
 
+  def shuffle(self):
+    random.shuffle(self.cards)
+
+  def deal(self):
+    card = self.cards.pop()
+    return card
+
 
 deck = Deck()
-for card in deck.cards:
-  card.printCard()
+deck.shuffle()
+# card = deck.dealCards()
+# card.printCardAndValue()
+# card.printCardOnly()
+dealerHand = []
+playerHand = []
+for _ in range(2):
+  card = deck.deal()
+  dealerHand.append(card)
+  card = deck.deal()
+  playerHand.append(card)
+
+  print(dealerHand)
+  print(playerHand)
