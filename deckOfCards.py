@@ -13,7 +13,6 @@ class Card():
   def printCardOnly(self):
     suitIcon = {"club":"♣", "diamond":"♦", "heart":"♥", "spade":"♠"}
     print(f"{self.face}{suitIcon[self.suit]}")
-
   # def dealCards(self):
   #   return card
 
@@ -41,10 +40,9 @@ class Deck():
     card = self.cards.pop()
     return card
 
-
 deck = Deck()
 deck.shuffle()
-# card = deck.dealCards()
+# card = deck.deal()
 # card.printCardAndValue()
 # card.printCardOnly()
 dealerHand = []
@@ -55,5 +53,5 @@ for _ in range(2):
   card = deck.deal()
   playerHand.append(card)
 
-  print(dealerHand)
-  print(playerHand)
+print(dealerHand)
+print(playerHand)
