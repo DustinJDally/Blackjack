@@ -1,14 +1,60 @@
 import random
 
-# Create the Cards
+# suits = ('Clubs', 'Diamonds', 'Hearts', 'Spades')
+suits = ('♣️', '♦️', '♥️', '♠️')
+faces = ('A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K')
+values = {'A':10, '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, '10':10, 'J':10, 'Q':10, 'K':10}
 
+playing = True
+
+# Create the Cards class
+class Card():
+
+  def __init__(self, suit, face):
+    self.suit = suit
+    # self.suitSymbol = suitSymbol
+    self.face = face
+  
+  def __str__(self):
+    # suitSymbols = {'Clubs':'♣️', 'Diamonds':'♦️', 'Hearts':'♥️', 'Spades':'♠️'}
+    return self.face + self.suit
 
 # Create the Deck
+class Deck():
+
+  def __init__(self):
+    self.deck = []
+    for suit in suits:
+      for face in faces:
+        self.deck.append(Card(suit,face))
+  
+  def __str__(self):
+    fullDeck = ''
+    for card in self.deck:
+      fullDeck += '\n ' +card.__str__()
+    return 'The Deck has: ' + fullDeck
 
   # Shuffle and Deal functions
+  def shuffle(self):
+    random.shuffle(self.deck)
 
+  def deal(self):
+    dealtCard = self.deck.pop()
+    return dealtCard
 
 # Create the Hand Class
+class Hand:
+  def __init__(self):
+    self.cards = []
+    self.value = 0
+    self.aces = 0
+
+  def addCard(self, card):
+    self.cards.append(card)
+    self.value += values[card.face]
+
+  def isAce(self):
+    pass
 
   # Setup dealing 2 cards to dealer and player, assigning a value to the cards (A is 1 or 11)
 
@@ -53,3 +99,18 @@ import random
     #   Check to make sure dealer doesn't go over 21
     # Determine winner
     # Ask if player wantes to play again (exit on NO)
+
+
+# TESTING
+
+testDeck = Deck()
+
+# print(testDeck)
+testDeck.shuffle()
+testPlayer = Hand()
+testPlayer.addCard(testDeck.deal())
+testPlayer.addCard(testDeck.deal())
+testPlayer.value
+
+for card in testPlayer.cards:
+  print(card)
