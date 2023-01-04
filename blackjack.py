@@ -3,7 +3,7 @@ import random
 # suits = ('Clubs', 'Diamonds', 'Hearts', 'Spades')
 suits = ('♣️', '♦️', '♥️', '♠️')
 faces = ('A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K')
-values = {'A':10, '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, '10':10, 'J':10, 'Q':10, 'K':10}
+values = {'A':11, '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, '10':10, 'J':10, 'Q':10, 'K':10}
 
 playing = True
 
@@ -52,10 +52,17 @@ class Hand:
   def addCard(self, card):
     self.cards.append(card)
     self.value += values[card.face]
+    if card.face == 'A':
+      self.aces += 1
 
   def isAce(self):
-    pass
+    if self.value > 21 and self.aces:
+      self.value -= 10
+      self.aces -= 1
 
+  # def __str__(self):
+  #   if self.aces:
+  #     return self.value - 10 + ' or ' + self.value
   # Setup dealing 2 cards to dealer and player, assigning a value to the cards (A is 1 or 11)
 
 
@@ -114,3 +121,4 @@ testPlayer.value
 
 for card in testPlayer.cards:
   print(card)
+print (testPlayer.value)
