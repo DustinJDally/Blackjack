@@ -70,7 +70,7 @@ class Hand:
 class Bankroll:
   def __init__(self):
     self.deposit = 0
-    self.chipTotal = 0
+    self.chipTotal = 1000
     self.bet = 0
 
   # Deposit money
@@ -94,6 +94,10 @@ class Bankroll:
     self.chipTotal += self.bet
 
 
+
+# def depositMoney(bankroll):
+#     bankroll.deposit = int(input('How much do you want to deposit: $'))
+
 # Create a betting function
 def placeBet(bankroll):
 
@@ -103,15 +107,17 @@ def placeBet(bankroll):
     except ValueError:
       print('Please enter a number value for the bet')
     else: 
-      if bankroll.bet > bankroll.total:
+      if bankroll.bet > bankroll.chipTotal:
         print("You can't afford that bet, try again")
       else: 
         break
 
+
+
 # Create Hit function  (can add a split function later if interested)
 def hit(deck, hand):
 
-  hand.dealCard(deck.deal()) 
+  hand.addCard(deck.deal()) 
   hand.isAce()
 
 # Setup a hit or stand function
@@ -120,31 +126,33 @@ def playerAction(deck, hand):
 
   while True: 
     action = input('Hit (H) or Stand (S)')
-    if action[0].upper == 'H':
-      hit(deck,hand)
-    elif action[0].upper == 'S':
+    
+    if action[0].upper() == 'H':
+      hit(deck, hand)
+
+    elif action[0].upper() == 'S':
       print('Player stands, action to dealer')
+      playing = False
+    
     else:
       print('Invalid option, please enter H to hit or S to stand: ')
       continue
     break
 
-
 # Create show cards functions (include during the game (only 1 dealer card visible) and after (all cards visible))
 
 def showCardsInAction(player, dealer):
-  print("\nThe Dealer's Hand is:\n")
-  print('[X] ', dealer.cards[1], 'Value: ', dealer.value)
+  print("\nThe Dealer's Hand is:")
+  print('[X]', dealer.cards[1])
   print("The Player's Hand:\n", *player.cards, 'Value:', player.value, sep=' ')
 
 def showCardsAfterAction(player, dealer):
-  print("The Dealer's Hand:\n", *dealer.cards,'Value: ', dealer.value, sep=' ')
-  print("The Player's Hand:\n", *player.cards,'Value: ', dealer.value, sep=' ')
+  print("\nThe Dealer's Hand:\n", *dealer.cards,'Value: ', dealer.value, sep=' ')
+  print("The Player's Hand:\n", *player.cards,'Value: ', player.value, sep=' ')
 
 # Create hand results and determine payout
-def playerBusts(player, dealer, bankroll):
+def playerBusts(player, dealer):
   print('Player busted! You lose, sorry')
-  bankroll.loseBet()
 
 def playerWins(player, dealer, bankroll):
   print('You beat the dealer! You win, congrats!')
@@ -189,7 +197,8 @@ while True:
 
   # Ask Player to add money to bankroll
   playerBankroll = Bankroll()
-
+  # depositMoney(Bankroll)
+  
     # Ask player if they want to play (If you build poker)
     # Ask Player how much they want to bet
   placeBet(playerBankroll)
@@ -197,69 +206,52 @@ while True:
 
   while playing:
 
-    #check if dealer or play have a Blackjack
+    # check if dealer or play have a Blackjack
     if playerHand.value == 21 and dealerHand.value == 21:
       gamePushes(playerHand, dealerHand, playerBankroll)
-    elif dealerHand == 21:
+      break
+    elif dealerHand.value == 21:
       dealerBlackjacks(playerHand, dealerHand)
       break
-    elif playerHand == 21:
+    elif playerHand.value == 21:
       playerBlackjacks(playerHand, dealerHand, playerBankroll)
       break
-    else:
-      continue
 
+
+    # Show the cards again
+    # showCardsInAction(playerHand, dealerHand)
+    # while playerHand.value <= 21:
     # Ask player to hit or stand
     playerAction(deck, playerHand)
-    # Show the cards again
     showCardsInAction(playerHand, dealerHand)
-
     if playerHand.value > 21:
-      playerBusts(playerHand, dealerHand, playerBankroll)
+      playerBusts(playerHand, dealerHand)
       break
 
-  if playerHand.value <= 21:
-    while dealerHand < 17:
+    # if playerHand.value <= 21:
+    while dealerHand.value < 17:
       hit(deck,dealerHand)
     showCardsAfterAction(playerHand, dealerHand)
-  
-  if dealerHand > 21:
-    dealerBusts(playerHand, dealerHand)
-  elif dealerHand.value > playerHand.value:
-    dealerWins(playerHand, dealerHand)
-  elif dealerHand < playerHand.value:
-    playerWins(playerHand, dealerHand, playerBankroll)
-  else:
-    gamePushes(playerHand, dealerHand, playerBankroll)
+
+    if dealerHand.value > 21:
+      dealerBusts(playerHand, dealerHand, playerBankroll)
+
+    elif dealerHand.value > playerHand.value:
+      dealerWins(playerHand, dealerHand)
+
+    elif dealerHand.value < playerHand.value:
+      playerWins(playerHand, dealerHand, playerBankroll)
+
+    else:
+      gamePushes(playerHand, dealerHand, playerBankroll)
 
 #Show new Bankroll:
-print('\nYour current bankroll is: ' ,playerBankroll.chipTotal)
-playAgain = input('Would you like to play again? Yes (Y) or No (N)')
+  print('\nYour current bankroll is: ' ,playerBankroll.chipTotal)
+  playAgain = input('Would you like to play again? Yes (Y) or No (N)')
 
-if playAgain == 
-
-
-
-# input('Hit (H) or Stand (S)')
-#     if action[0].upper == 'H':
-#       hit(deck,hand)
-#     elif action[0].upper == 'S':
-#       print('Player stands, action to dealer')
-#     else:
-#       print('Invalid option, please enter H to hit or S to stand: ')
-#       continue
-#     break
-# TESTING
-
-# testDeck = Deck()
-
-# # print(testDeck)
-# testDeck.shuffle()
-# testPlayer = Hand()
-# testPlayer.addCard(testDeck.deal())
-# testPlayer.addCard(testDeck.deal())
-# testPlayer.value
-
-# for card in testPlayer.cards:
-#   print(card)
-# print (testPlayer.value)
+  if playAgain[0].upper()=='Y':
+    playing=True
+    continue
+  else:
+    print('Thank you come again!')
+    break
