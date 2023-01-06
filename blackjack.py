@@ -78,7 +78,7 @@ class Bankroll:
     self.chipTotal += self.deposit
 
   # loss = lose bet
-  def placeBet(self):
+  def loseBet(self):
     self.chipTotal -= self.bet
 
   # Win = bet = 1:1 (Bet * 1 == winnings)
@@ -131,7 +131,7 @@ def playerAction(deck, hand):
       hit(deck, hand)
 
     elif action[0].upper() == 'S':
-      print('Player stands, action to dealer')
+      print('Player stands, action to the dealer')
       playing = False
     
     else:
@@ -151,7 +151,7 @@ def showCardsAfterAction(player, dealer):
   print("The Player's Hand:\n", *player.cards,'Value: ', player.value, sep=' ')
 
 # Create hand results and determine payout
-def playerBusts(player, dealer):
+def playerBusts(player, dealer, bankroll):
   print('Player busted! You lose, sorry')
 
 def playerWins(player, dealer, bankroll):
@@ -166,11 +166,13 @@ def dealerBusts(player, dealer, bankroll):
   print('Dealer busted! You win, congrats')
   bankroll.winBet()
 
-def dealerWins(player, dealer):
+def dealerWins(player, dealer, bankroll):
   print('The dealer beat you! You lose, sorry!')
+  bankroll.loseBet()
 
-def dealerBlackjacks(player, dealer):
+def dealerBlackjacks(player, dealer, bankroll):
   print('Dealer got a Blackjack, better luck next time')
+  bankroll.loseBet()
 
 def gamePushes(player, dealer, bankroll):
   print('You and the dealer tied! ')
@@ -211,7 +213,7 @@ while True:
       gamePushes(playerHand, dealerHand, playerBankroll)
       break
     elif dealerHand.value == 21:
-      dealerBlackjacks(playerHand, dealerHand)
+      dealerBlackjacks(playerHand, dealerHand, playerBankroll)
       break
     elif playerHand.value == 21:
       playerBlackjacks(playerHand, dealerHand, playerBankroll)
@@ -237,7 +239,7 @@ while True:
       dealerBusts(playerHand, dealerHand, playerBankroll)
 
     elif dealerHand.value > playerHand.value:
-      dealerWins(playerHand, dealerHand)
+      dealerWins(playerHand, dealerHand, playerBankroll)
 
     elif dealerHand.value < playerHand.value:
       playerWins(playerHand, dealerHand, playerBankroll)
